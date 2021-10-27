@@ -134,3 +134,9 @@ class Atom():
             self.force += np.array(val)
         else:
             print('Dimension not valid, force was not changed')
+
+            
+            
+            
+            
+            
