@@ -148,19 +148,6 @@ class Atom():
         
             
 
-def main():
-    a = Atom()
-    pos = [1, 2, 3]
-    a.input_force(pos)
-    # print(a.get_pos())
-    # a.len_unit(5)
-    # print(a.get_pos())
-    force = [1, 0, 1]
-    a.add_force(force)
-    print(a.get_force())
-# main()
-    
-
 
 
 
