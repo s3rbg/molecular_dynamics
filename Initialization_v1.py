@@ -91,17 +91,5 @@ class Initialization():
     def get_atoms(self):
         return self.atoms
     
-def main():
-    a = Initialization(4)
-    a.unit_cell()
-    a.supercell()
-    a.tests('pos.txt')
-    # b = a.get_atoms()
-    # for i in b:
-    #     print(i.get_pos())
-    # a = [1, 2, 4]
-    # b = [5, 6]
-    # a.extend(b)
-    # print(a)
-main()
+
     
