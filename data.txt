@@ -1,0 +1,14 @@
+variable,             value,         units(if_needed),  Comments(as many columns as needed)
+density,              0.09,          g/cm**3
+number_of_units,      10
+temperature,          100,           K
+epsilon,              9e-19,         J
+sigma,                0.231,         nm
+cutoff_distance,      2.5
+cutoff_list,          2.7
+cell_type,            FCC
+potential_type,       LENnard-Jones
+algo_ode,             Verlet
+tot_t,                1000
+delta_t,              0.001
+velocities_dist,      M-B
