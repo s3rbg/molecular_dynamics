@@ -8,7 +8,7 @@ Created on Mon Nov 22 16:10:18 2021
 from Initialization import Initialization
 
     
-def initialize(T, N, sigma, a):
+def initialize(T, N, sigma, a, directory='.'):
     """
     Using the Initialization class, it generates the initial positions and 
     velocities required for a molecular dynamics simulation
@@ -31,7 +31,7 @@ def initialize(T, N, sigma, a):
 
     """
     #Create object
-    b = Initialization(T, N, sigma, a)
+    b = Initialization(T, N, sigma, a, directory)
     
     #Position initialization
     b.unit_cell()
