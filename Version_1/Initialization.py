@@ -5,7 +5,6 @@ Created on Tue Oct 26 23:59:39 2021
 """
 import numpy as np
 import matplotlib.pyplot as plt
-from Atom import Atom
 import os
 from pandas import DataFrame
 from Generation import Generation
