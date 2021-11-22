@@ -181,21 +181,5 @@ class Initialization():
             
     
     
-def main():
-    T = 20
-    N = 10
-    ct = 1/N
-    sigma=2
-    a = Initialization(T, N, sigma, ct)
-    a.unit_cell()
-    a.supercell()
-    a.final_change()
-    a.velocities()
-    
-    x = a.get_pos()
-    v = a.get_vel()
-    # print(a.get_size())
-    a.tests()
-    # print('Finished')
-main()
+
     
