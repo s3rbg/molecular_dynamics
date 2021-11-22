@@ -31,8 +31,7 @@ def main():
     sim = simulation(data_file)
     
     
-    print(sim.get_parameters())
-    
+    sim.simulate()    
     del sim
 
 main()
