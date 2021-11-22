@@ -15,9 +15,9 @@ energy_units_upp = {'J':6.25e18, 'erg': 6.242e+11, 'eV':1, 'cal': 26131936951817
 
 number_atoms_cell_upp = {'FCC': 4, 'BCC': 2, 'SC': 1}
 
-temperature_units_upp = ('Celsius', 'K', 'Fahrenheit')
+temperature_units_upp = ('Celsius', 'C', 'K', 'F', 'Fahrenheit', 'Kelvin')
 
-ode_algos_upp = ('Verlet', 'RK4')
+ode_algos_upp = ('Velocity-Verlet', 'Verlet', 'Leap-Frog')
 potential_types_upp = ('Lennard-Jones', 'Otros') # (...)
 vels_dist_upp = ('M-B', 'otro')
 
@@ -26,7 +26,7 @@ keywords = ('density', 'number_of_units', 'epsilon', 'temperature',
                    'cutoff_distance', 'cutoff_list', 'velocities_dist', 'density_units', 'sigma_unit', 
                    'epsilon_units', 'temperature_units')
 
-default_data = [0.09e-3, 10, 1e-18, 300, 'fcc', 'lennard-jones', 'verlet',
+default_data = [0.09e-3, 10, 1e-18, 300, 'fcc', 'lennard-jones', 'velocity-verlet',
                         1000, 0.001, 0.231, 2.5, 2.7, 'm-b', 'kg/m**3', 'nm', 'j', 'k']
 
 distance_units =  {k.lower(): v for k, v in distance_units_upp.items()}
