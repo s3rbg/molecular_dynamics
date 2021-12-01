@@ -95,9 +95,7 @@ def doubleloop(sigma, type_potential, point, lista, Nat, atoms, vel, nf, LATCON,
                 rel_dis, theta, phi = to_spherical(rel_pos[0], rel_pos[1], rel_pos[2])
 
                 force = force_lj_shifted(sigma, epsilon, rel_dis, rc) 
-                x_coord, y_coord, z_coord = to_cartesian(force, theta, phi)
-                coords = [x_coord, y_coord, z_coord]
-                print(len(coords))
+
                 for x in range(3):
                     fuerza[iat][x]=fuerza[iat][x] + coords[x]
                     fuerza[J][x]=fuerza[J][x] - coords[x]
@@ -110,13 +108,3 @@ def doubleloop(sigma, type_potential, point, lista, Nat, atoms, vel, nf, LATCON,
         print('wrong tipe of potential')     
     return (np.array(fuerza), potencial, cinetica, total)   
 
-def to_spherical(x, y, z):
-    r = np.sqrt(x**2 + y**2 + z**2)
-    theta = np.arccos(z/r)
-    phi = np.arctan2(y, x)
-    return r, theta, phi 
-def to_cartesian(r, theta, phi):
-    x = r * np.cos(phi) * np.sin(theta)
-    y = r * np.sin(phi) * np.sin(theta)
-    z = r * np.cos(theta)
-    return x, y, z
