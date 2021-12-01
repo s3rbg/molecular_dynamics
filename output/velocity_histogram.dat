@@ -1,0 +1,36 @@
+Histogram for the initial velocities
+the velocities are generated according to a Gaussian distribution
+for each of the cartesian axis
+The variance is 0.022
+
+Velocity (reduced units)	 Number of atoms with one component being between that velocity and the next one
+-0.2168249964 								 0
+-0.2023699967 								 0
+-0.1879149969 								 0
+-0.1734599971 								 0
+-0.1590049974 								 0
+-0.1445499976 								 0
+-0.1300949978 								 0
+-0.1156399981 								 0
+-0.1011849983 								 0
+-0.0867299986 								 0
+-0.0722749988 								 0
+-0.0578199990 								 0
+-0.0433649993 								 0
+-0.0289099995 								 0
+-0.0144549998 								 173
+ 0.0000000000 								 151
+ 0.0144549998 								 0
+ 0.0289099995 								 0
+ 0.0433649993 								 0
+ 0.0578199990 								 0
+ 0.0722749988 								 0
+ 0.0867299986 								 0
+ 0.1011849983 								 0
+ 0.1156399981 								 0
+ 0.1300949978 								 0
+ 0.1445499976 								 0
+ 0.1590049974 								 0
+ 0.1734599971 								 0
+ 0.1879149969 								 0
+ 0.2023699967 								 0
