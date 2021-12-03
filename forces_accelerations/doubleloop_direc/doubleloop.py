@@ -54,10 +54,10 @@ def dobleloop(sigma, type_potential, point, lista, Nat, atoms, vel, nf, LATCON):
                 rel_pos = position-position_neig
                 rel_pos = rel_pos - round(rel_pos/BOXL,1)*BOXL #rel_pos=relative position with the iat atom: R(j)=r(j)-position
                 rel_dis = np.sqrt( rel_pos[1]^2 + rel_pos[2]^2 + rel_pos[3]^2 )
+                f= force_lj(sigma, rel_dis)
                 for x in range(1,4):
-                    d = position[x]-position_neig[x]
-                    fuerza[iat][x]=fuerza[iat][x] + force_lj(sigma, d)
-                    fuerza[jneig][x]=fuerza[jneig][x] - force_lj(sigma, d)
+                    fuerza[iat][x]=fuerza[iat][x] + f*rel_pos[x]/rel_dis
+                    fuerza[jneig][x]=fuerza[jneig][x] - f*rel_pos[x]/rel_dis
             
                 potencial[iat]= potencial[iat] + potential_lj(sigma, rel_dis)
                 potencial[J]= potencial[J] + potential_lj(sigma, rel_dis)
@@ -79,10 +79,10 @@ def dobleloop(sigma, type_potential, point, lista, Nat, atoms, vel, nf, LATCON):
                 rel_pos = position-position_neig
                 rel_pos = rel_pos - round(rel_pos/BOXL,1)*BOXL #rel_pos=relative position with the iat atom: R(j)=r(j)-position
                 rel_dis = np.sqrt( rel_pos[1]^2 + rel_pos[2]^2 + rel_pos[3]^2 )
+                f= force_lj_shifted(sigma, rel_dis)
                 for x in range(1,4):
-                    d = position[x]-position_neig[x]
-                    fuerza[iat][x]=fuerza[iat][x] + force_lj_shifted(sigma, d)
-                    fuerza[jneig][x]=fuerza[jneig][x] - force_lj_shifted(sigma, d)
+                    fuerza[iat][x]=fuerza[iat][x] + f*rel_pos[x]/rel_dis
+                    fuerza[jneig][x]=fuerza[jneig][x] - f*rel_pos[x]/rel_dis
             
                 potencial[iat]= potencial[iat] + potential_lj_shifted(sigma, rel_dis)
                 potencial[J]= potencial[J] + potential_lj_shifted(sigma, rel_dis)
