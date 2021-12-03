@@ -6,7 +6,7 @@ def force_lj(sigma, epsilon, distance, rc):
     Parameters
     ----------
     sigma : float
-        the parameter sigma of the leonard-jones otential
+        the parameter sigma of the leonard-jones otential 
         
     epsilon : float
         the parameter epsilon of the leonard-jones otential
