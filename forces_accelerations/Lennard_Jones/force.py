@@ -22,6 +22,8 @@ def force_lj(sigma, epsilon, distance, rc):
     float
         force that makes particles 1 to particle 2 due to original leonrd-jones potential
     """
+    if distance == 0:
+        return 0 
     if distance<=rc:
         f = (48*(epsilon/distance))*((sigma/distance)**(12)-0.5*(sigma/distance)**6)
         fc = (48*(epsilon/rc))*((sigma/rc)**(12)-0.5*(sigma/rc)**6)
