@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 """
 Created on Fri Oct 29 10:35:55 2021
-
 @author: Sergio
 """
 import numpy as np
@@ -46,7 +45,3 @@ def main():
     print(sum(vx))
     print(sum(vy))
     print(sum(vz))
-    
-
-        
-        
