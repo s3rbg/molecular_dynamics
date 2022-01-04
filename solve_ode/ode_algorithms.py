@@ -41,7 +41,6 @@ def velocity_verlet(positions, velocities, accelerations, old_neigh_point, old_n
                                    lat_con, epsilon, cutoff_for_neigh, direc)[0]
     velocities = inter_velocities + 0.5 * accelerations * delta_t
     
-    positions_to_txt(positions, direc) # Save in a text file the new coordinates
     return positions, velocities, accelerations, neigh_point, neigh_list
 
 def leap_frog(positions, velocities, accelerations, old_neigh_point, old_neigh_list, n_at, delta_t, cutoff_for_disp, cutoff_for_neigh, 
@@ -68,7 +67,6 @@ def leap_frog(positions, velocities, accelerations, old_neigh_point, old_neigh_l
         accelerations, potential, kinetic, total = doubleloop(sigma, potential_type, neigh_point, neigh_list, 
                                                               n_at, positions, velocities, number_of_cells, 
                                                               lat_con, epsilon, cutoff_for_neigh, direc)
-    positions_to_txt(positions, direc) # Save in a text file the new coordinates
 
     return positions, velocities, accelerations, neigh_point, neigh_list
 
@@ -98,7 +96,6 @@ def verlet(positions, old_positions, velocities, accelerations, old_neigh_point,
                                                               n_at, positions, velocities, number_of_cells, 
                                                               lat_con, epsilon, cutoff_for_neigh, direc)
     
-    positions_to_txt(positions, direc) # Save in a text file the new coordinates
 
     return positions, velocities, accelerations, neigh_point, neigh_list
     

@@ -11,12 +11,36 @@ from common_modules.imports import *
 def energy_to_txt(kinetic, potential, direc):
     append_new_line(direc + '/energy_each_step.txt', '{:.2f}, {:.2f}, {:.2f}'.format(kinetic, potential, kinetic+potential))
     
-    
-def positions_to_txt(position, direc):
-    append_new_line(direc + '/positions_each_step.txt', ' ')
 
-    for i, j, k in zip(position[:, 0], position[:, 1], position[:, 2]):
-        append_new_line(direc + '/positions_each_step.txt', '{:.2f}, {:.2f}, {:.2f}'.format(i, j, k))
+def positions_to_txt(time, itime, pos, directory='.'):
+    """
+    Creates a .dat file with the positions for a given time step
+    
+    Parameters:
+        time: float
+            time of the simulated positions
+        itime: int
+            index of the time step to create the file
+        pos: array
+            positions of the atoms for the given time step
+        directory: string
+            Directory where the file is going to be saved without the last bar.
+            The default is where this .py file is.
+            
+    """
+    file = directory + '/positions'+str(itime)+'.dat'
+    columns  = ['x', 'y', 'z']
+    index = np.arange(len(pos))+1
+    df = pd.DataFrame(data=pos, index=index, columns=columns)
+    
+    if os.path.exists(file):
+        os.remove(file)
+    with open(file, 'a+') as f:
+        f.write('Positions of the atoms at time '+str(time)+'\n\n')
+        f.close()
+    df.to_csv(file, sep='\t', mode='a+')
+    
+    
 
 def append_new_line(file_name, text_to_append):
     """Append given text as a new line at the end of file"""

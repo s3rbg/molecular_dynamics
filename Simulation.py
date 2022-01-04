@@ -136,7 +136,7 @@ class simulation():
         positions, velocities = initialize(self.reduced_temperature, self.n_cells, self.sigma, self.lattice_constant, self.directory)
         
         # Save initial positions
-        positions_to_txt(positions, self.directory)
+        positions_to_txt(0, 1, positions, self.directory)
        
         
         self.n_tot_at = len(positions)
@@ -151,24 +151,33 @@ class simulation():
         # Solve ode
         
         step = 0
-        
+        j = 1
         if self.algo_ode == 'velocity-verlet':
             old_parameters = [positions, velocities, accelerations, neigh_point, neigh_list]
             while step <= self.tot_t*self.delta_t:
+                j = j+1
                 old_parameters = velocity_verlet(*old_parameters, *common_parameters)
+                positions_to_txt(step, j, old_parameters[0], self.directory) # Save in a text file the new coordinates
+
                 step = step + self.delta_t
         elif self.algo_ode == 'leap-frog':
             old_parameters = [positions, velocities, accelerations, neigh_point, neigh_list]
             while step <= self.tot_t:
+                j = j+1
                 old_parameters = leap_frog(*old_parameters, *common_parameters)
+                positions_to_txt(step, j, old_parameters[0], self.directory) # Save in a text file the new coordinates
+
                 step = step + self.delta_t
         else:
             # Check if putting the same position on old an new works
+            old_parameters = [positions, positions, velocities, accelerations, neigh_point, neigh_list]
+
             while step <= self.tot_t:
-                old_parameters = [positions, positions, velocities, accelerations, neigh_point, neigh_list]
+                j = j+1
                 old_parameters = verlet(*old_parameters, *common_parameters)
+                positions_to_txt(step, j, old_parameters[0], self.directory) # Save in a text file the new coordinates
+
                 step = step + self.delta_t
-        #print(old_parameters[0])    
     
     def get_parameters(self):
         
