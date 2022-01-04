@@ -20,17 +20,21 @@ from forces_accelerations.neighbour_list.verlet_list import list_neighbour
 # ODE solving imports
 from solve_ode.ode_algorithms import verlet, velocity_verlet, leap_frog
 
+# Output writing functions
+from write_to_file.to_txt import positions_to_txt, energy_to_txt
+
 # Other imports
 from common_modules.imports import *
 from common_modules.units_dicts import *
 from common_modules.errors import InputError
+
 
 #Total simulation time. Añadir opciones para los 
 # demas parametros
 
 # uses eV, ang, g/cm3, K
 
-k = 8.62e-5 # eV * K
+k = 8.63125e-5 # eV * K
 
 how_many_units = 4 # starting from end. How many elements of the list are units
 
@@ -71,7 +75,7 @@ class simulation():
         self.temperature = float(self.transform_to_kelvin(float(df['temperature'].iloc[0]), df['temperature_units'].iloc[0]))      
         self.n_at = number_atoms_cell[self.cell_type]
         
-        self.reduced_density = self.density * self.sigma ** 3
+        self.reduced_density = self.density * (self.sigma * 10**-7) ** 3
         self.reduced_temperature = k * self.temperature/self.epsilon
                 
         self.lattice_constant = self.get_constant()
@@ -94,32 +98,63 @@ class simulation():
             DESCRIPTION.
 
         """
-        return (self.n_at/self.reduced_density) ** 1/3
+        return (self.n_at/self.reduced_density) ** (1/3)
 
 
     def simulate(self):
-              
+
+        # Create data files to store the data. If the files exist, they are removed
+        energy_file_name = self.directory + '/energy_each_step.txt'
+        positions_file_name = self.directory + '/positions_each_step.txt'
+        if os.path.exists(energy_file_name):
+            os.remove(energy_file_name)
+            
+        if os.path.exists(positions_file_name):
+            os.remove(positions_file_name)
+            
+        with open(energy_file_name, "a+") as file_object:
+            file_object.write('Energy, in reduced units, for every time step')
+            file_object.seek(0)
+            # If file is not empty then append '\n'
+            data = file_object.read(100)
+            if len(data) > 0:
+                file_object.write("\n")
+            file_object.write('kinetic, potential, total')
         
+        with open(positions_file_name, "a+") as file_object:
+            file_object.write('Positions of every atom, in reduced units, for every time step')
+            file_object.seek(0)
+            # If file is not empty then append '\n'
+            data = file_object.read(100)
+            if len(data) > 0:
+                file_object.write("\n")
+            file_object.write('x, y, z')
+
+
+              
         # Initialize positions/velocities/accelerations
         positions, velocities = initialize(self.reduced_temperature, self.n_cells, self.sigma, self.lattice_constant, self.directory)
-                
+        
+        # Save initial positions
+        positions_to_txt(positions, self.directory)
+       
+        
         self.n_tot_at = len(positions)
         # Parameters that remain constant in each iteration
         common_parameters = (self.n_tot_at, self.delta_t, self.cutoff_list, self.cutoff_distance, 
-                             self.potential_type, self.n_cells, self.lattice_constant, self.sigma, self.epsilon)
+                             self.potential_type, self.n_cells, self.lattice_constant, self.sigma, self.epsilon, self.directory)
         
         
-        neigh_point, neigh_list = list_neighbour(self.sigma, self.lattice_constant, self.n_tot_at, self.n_cells, positions, self.cutoff_distance)
-
+        neigh_point, neigh_list = list_neighbour(self.sigma, self.lattice_constant, self.n_tot_at, self.n_cells, self.cutoff_distance, positions)
         accelerations = doubleloop(self.sigma, self.potential_type, neigh_point, neigh_list, 
-                                  self.n_tot_at, positions, velocities, self.n_cells, self.lattice_constant, self.epsilon, self.cutoff_distance)
+                                  self.n_tot_at, positions, velocities, self.n_cells, self.lattice_constant, self.epsilon, self.cutoff_distance, self.directory)[0]
         # Solve ode
         
         step = 0
         
         if self.algo_ode == 'velocity-verlet':
             old_parameters = [positions, velocities, accelerations, neigh_point, neigh_list]
-            while step <= self.tot_t:
+            while step <= self.tot_t*self.delta_t:
                 old_parameters = velocity_verlet(*old_parameters, *common_parameters)
                 step = step + self.delta_t
         elif self.algo_ode == 'leap-frog':
@@ -133,8 +168,7 @@ class simulation():
                 old_parameters = [positions, positions, velocities, accelerations, neigh_point, neigh_list]
                 old_parameters = verlet(*old_parameters, *common_parameters)
                 step = step + self.delta_t
-            
-            
+        #print(old_parameters[0])    
     
     def get_parameters(self):
         
