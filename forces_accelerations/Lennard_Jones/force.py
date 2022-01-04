@@ -2,7 +2,6 @@ import numpy as np
 
 def force_lj(sigma, epsilon, distance, rc):
     """
-
     Parameters
     ----------
     sigma : float
@@ -16,7 +15,6 @@ def force_lj(sigma, epsilon, distance, rc):
         
     rc: float
         the cut off distance
-
     Returns
     -------
     float
@@ -24,12 +22,9 @@ def force_lj(sigma, epsilon, distance, rc):
     """
     if distance == 0:
         return 0 
-    if distance<=rc:
-        f = (48*(epsilon/distance))*((sigma/distance)**(12)-0.5*(sigma/distance)**6)
-        fc = (48*(epsilon/rc))*((sigma/rc)**(12)-0.5*(sigma/rc)**6)
-        dfc =(24*sigma**6)*(7*rc**6-26*rc**6)/(rc**(14))
-        
-        force = f - fc - dfc
+    if distance<=rc/sigma:
+        force = (48 * (1/distance) * ((1 / distance) ** (12) - 0.5 * (1 / distance) ** 6))       
     else:
         force = 0
     return force
+

@@ -1,15 +1,16 @@
 import numpy as np
+import matplotlib.pyplot as plt
 
-def potential_lj_shifted (sigma, epsilon, distance, rc):
+def potential_lj_shifted (sigma, distance, rc):
     """
     
     Parameters
     ----------
     sigma : float
-        the parameter sigma of the leonard-jones otential
+        the parameter sigma of the leonard-jones potential
         
     epsilon : float
-        the parameter epsilon of the leonard-jones otential
+        the parameter epsilon of the leonard-jones potential
         
     distance: float
         the distance between the two particles
@@ -22,14 +23,16 @@ def potential_lj_shifted (sigma, epsilon, distance, rc):
         the potencial energy (original leonard jones potential)
         of particle 1 due to particle 2 (the same of 2 due to 1)
     """
-    if distance <= rc:
-            
-        v=4*epsilon*((sigma/distance)**(12)-(sigma/distance)**6)  
-        vc=4*epsilon*((sigma/rc)**(12)-(sigma/rc)**6)  
-        dvc= (48*(epsilon/rc))*((sigma/rc)**(12)-0.5*(sigma/rc)**6)
-        energy= v - vc -dvc
+
+    r_twelve = rc ** 12 
+    r_six = rc ** 6
+
+    if distance <= rc/sigma:
+        e = 4 * ( (1/distance)**12 - (1/distance)**6)
+        ec = 4 * ( (1/r_twelve) - (1/r_six))
+        dec =(-48/rc) * (1/(r_twelve) - 0.5/(r_six)) * (distance - rc)
+        energy = e - ec - dec
     else:
         energy = 0
-    
-    
     return energy
+

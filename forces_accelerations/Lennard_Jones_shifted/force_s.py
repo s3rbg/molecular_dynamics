@@ -1,6 +1,6 @@
 import numpy as np
 
-def force_lj_shifted(sigma, epsilon, distance, rc):
+def force_lj_shifted(sigma, distance, rc):
     """
 
     Parameters
@@ -22,11 +22,15 @@ def force_lj_shifted(sigma, epsilon, distance, rc):
     float
         force that makes particles 1 to particle 2 due to original leonrd-jones potential
     """
+    r_twelve = rc ** 12 
+    r_six = rc ** 6
+
     if distance == 0:
         return 0 
-    if distance <= rc:
-        
-        force = (48*(epsilon/distance))*((sigma/distance)**(12)-0.5*(sigma/distance)**6)
+    if distance <= rc/sigma:
+        f = (24/distance)*(2*(1/distance)**12 - (1/distance)**6)
+        dfc = (48/rc *((1/r_twelve)-0.5*(1/r_six)))
+        force = f - dfc
     else:
         force=0
         

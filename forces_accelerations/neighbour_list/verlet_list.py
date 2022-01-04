@@ -1,6 +1,6 @@
 import numpy as np
 
-def list_neighbour(sigma, LATCON, nat, nf, atoms, rl):
+def list_neighbour(sigma, LATCON, nat, nf, rl, atoms):
     """
     
     sigma : float
@@ -24,8 +24,7 @@ def list_neighbour(sigma, LATCON, nat, nf, atoms, rl):
         DESCRIPTION.
 
     """
-    
-    BOXL=(nf*LATCON)
+    BOXL=(nf*LATCON)/sigma
     NLIST=0 #counter
     point=np.zeros(nat-1)
     POINT=point.tolist()
@@ -35,12 +34,10 @@ def list_neighbour(sigma, LATCON, nat, nf, atoms, rl):
         position = atoms[iat] #position of the atom iat r(iat)
         for j in range(iat+1, nat):
             rel_pos = position-atoms[j]
-            rel_pos = rel_pos - np.round(rel_pos/BOXL, 1)* BOXL #rel_pos=relative position with the iat atom: R(j)=r(j)-position
+            rel_pos = rel_pos - np.round(rel_pos/BOXL, 0)* BOXL #rel_pos=relative position with the iat atom: R(j)=r(j)-position
             rel_dis = np.sqrt( rel_pos[0]**2 + rel_pos[1]**2 + rel_pos[2]**2 )
-            if rel_dis < rl:
-
+            if rel_dis < rl/sigma:
                 LIST.append(j)
-                NLIST = NLIST + 1
-            
+                NLIST = NLIST + 1   
     return (np.array(POINT), np.array(LIST))
 
