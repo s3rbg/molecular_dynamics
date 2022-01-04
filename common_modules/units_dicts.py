@@ -6,12 +6,12 @@ Created on Sat Oct 30 17:23:12 2021
 @author: dgiron
 """
 
-distance_units_upp = {"m": 10**10,  "mm": 10**7,  "cm": 10**8,  "nm": 10,  
-                  "microm": 10**4, 'Angstrom': 1, 'Bohr rad': 0.529177}
+distance_units_upp = {"m": 10**9,  "mm": 10**6,  "cm": 10**7,  "nm": 1,  
+                  "microm": 10**3, 'Angstrom': 0.1, 'Bohr rad': 0.0529177}
 
-density_units_upp = {"kg/m**3": 10**3, "g/cm**3": 1}
+density_units_upp = {"m**-3": 10**-6, "cm**-3": 1}
 
-energy_units_upp = {'J':6.25e18, 'erg': 6.242e+11, 'eV':1, 'cal': 26131936951817052000}
+energy_units_upp = {'J':1/1.6e-19, 'erg': 6.242e+11, 'eV':1, 'cal': 26131936951817052000}
 
 number_atoms_cell_upp = {'FCC': 4, 'BCC': 2, 'SC': 1}
 
