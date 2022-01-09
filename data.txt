@@ -8,7 +8,7 @@ cutoff_distance,      2.5
 cutoff_list,          2.7
 CELL_type,            FCC
 potential_type,       lennard-jones double shifted
-algo_ode,             VeLoCiTy-Verlet
+algo_ode,             leap-frog
 tot_t,                100
 delta_t,              0.005
 velocities_dist,      M-B
