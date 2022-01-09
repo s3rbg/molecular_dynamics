@@ -3,11 +3,11 @@
 """
 Created on Mon Nov  1 12:41:38 2021
 
-@author: dgiron
 """
 
 from tkinter import *
 
+ # Class to show a message over the arguments in the GUI
 class ToolTip(object):
 
     def __init__(self, widget):

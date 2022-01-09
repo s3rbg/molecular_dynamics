@@ -13,14 +13,14 @@ energy_units = list(energy_units_upp.keys())
 
 def read_lennard_verlet_parameters(obj):
 
-    obj.crea_entrada('Sigma parameter used in the lennard jones potential', "Sigma", 0.231e-9)
-    obj.crea_entrada('Epsilon parameter', "Epsilon", 8.6e-18)
+    obj.crea_entrada('Sigma parameter (lennard-jones potential). Every distance in the output file is displayed in units of this parameter', "Sigma", 0.341)
+    obj.crea_entrada('Epsilon parameter (lennard-jones potential). Every energy in the output file is displayed in units of this parameter', "Epsilon", 1.654438e-21)
 
-    obj.crea_entrada('Cutoff distance used to consider the neighbours in the potential' , "Cutoff distance", 2.5)
-    obj.crea_entrada('Cutoff distance used to update the neighbour list', "Cutoff list", 2.7)
+    obj.crea_entrada('Cutoff distance used to consider the neighbours in the potential, in units of sigma' , "Cutoff distance", 2.5)
+    obj.crea_entrada('Cutoff distance used to update the neighbour list, in units of sigma', "Cutoff list", 2.7)
 
-    obj.crea_combo('Sigma distance units', 'Sigma units', distance_units, default=False, clmn=2, rw=0, wdth=10)
-    obj.crea_combo('Epsilon energy units', 'Epsilon units', energy_units, default=False, clmn=2, rw=1, wdth=10)
+    obj.crea_combo('Units of the sigma parameter', 'Sigma units', distance_units, default=False, clmn=2, rw=0, wdth=10)
+    obj.crea_combo('Units of the epsilon parameter', 'Epsilon units', energy_units, default=False, clmn=2, rw=1, wdth=10)
 
     obj.espera()
     # Read float values

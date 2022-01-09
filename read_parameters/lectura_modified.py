@@ -33,7 +33,7 @@ from tkinter import Button
 from tkinter import E
 from tkinter import SUNKEN
 from tkinter import StringVar
-from tkinter.ttk import Combobox
+from tkinter.ttk import Combobox, Checkbutton, Radiobutton
 
 import time
 import math
@@ -115,6 +115,13 @@ class Lectura():
     def coloca_widget_donde_quiera(self, entrada, clmn, rw):
         entrada.grid(column=clmn, row=rw, padx=5, pady=5)
         
+    def coloca_widget_donde_quiera_special_last_item(self, entrada, clmn, rw, etiqueta):
+        self.__etiquetas[0].grid(column=clmn-1, row=rw, sticky=E,
+                                     padx=5, pady=5)
+        entrada.grid(column=clmn, row=rw, padx=5, pady=5)
+        self.__boton_ok.grid(column=0, row=2,
+                             columnspan=2, padx=5, pady=5)
+        
     def _muestra_error(self, texto: str):
         """
         Muestra un mensaje de error en pantalla
@@ -166,12 +173,11 @@ class Lectura():
             self.escribe_mensaje(msg, lbl)
             
     def crea_label(self, etiqueta, columna, fila):
-            Label(self.__marco, text=etiqueta).grid(column=columna, row=fila, padx=5, pady=5)
-           
-
+        Label(self.__marco, text=etiqueta).grid(column=columna, row=fila, padx=5, pady=5)
+            
                 
             
-    def crea_combo(self, msg, etiqueta, values, default=True, clmn=0, rw=0, wdth=20):
+    def crea_combo(self, msg, etiqueta, values, default=True, clmn=0, rw=0, wdth=20, last=False):
         if etiqueta in self.__diccionario and default:
             self._muestra_error("Etiqueta '"+etiqueta+"' repetida")
             
@@ -189,9 +195,6 @@ class Lectura():
             
             self.coloca_widget_donde_quiera(entrada, clmn, rw)
             self.escribe_mensaje(msg, entrada)
-
-            
-            
         else:
 
             lbl = Label(self.__marco, text=etiqueta)
@@ -205,10 +208,13 @@ class Lectura():
 
             self.__entradas.append(entrada)
             self.__diccionario[etiqueta] = entrada
-            self._colocar_widgets()    
+            if last:
+                self.coloca_widget_donde_quiera_special_last_item(entrada, clmn, rw, etiqueta)
+            else:
+                self._colocar_widgets()
             self.escribe_mensaje(msg, lbl)
         return entrada
-        
+       
     def espera(self)-> bool:
         """
         Pinta la ventana y espera hasta que se pulsa OK
@@ -261,8 +267,7 @@ class Lectura():
             return -1
         
         return int(num)
-        
-
+    
 
     def lee_float(self, etiqueta: str) -> str:
         """

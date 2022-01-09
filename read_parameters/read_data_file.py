@@ -10,37 +10,25 @@ Created on Sun Oct 24 13:20:12 2021
 from common_modules.imports import *
 from common_modules.units_dicts import *
 from common_modules.errors import InputError
-from read_parameters.check_input_errors import remove_comments, check_keywords
-
-def check_str(list_of_options, element, err_msg):
-    """
-    Checks if an input string is in a given list
-
-    Parameters
-    ----------
-    list_of_options : TYPE
-        DESCRIPTION.
-    element : TYPE
-        DESCRIPTION.
-    err_msg : TYPE
-        DESCRIPTION.
-
-    Raises
-    ------
-    InputError
-        DESCRIPTION.
-
-    Returns
-    -------
-    None.
-
-    """
-    if (element not in list_of_options):
-        raise InputError(err_msg)
-    
+from read_parameters.check_input_errors import remove_comments, check_keywords, check_str
     
 
 def read_data_txt(data_file):
+    """
+    Reads the data file, transforming the keywords, values and units in a DataFrame structure,
+    with the keyword as the column name
+
+    Parameters
+    ----------
+    data_file : str
+        route to the data file.
+
+    Returns
+    -------
+    pandas.DataFrame
+        dataframe with the data.
+
+    """
     # Check if file exists. If not, uses default values
     if os.path.exists(data_file):
         pd.options.display.float_format = '{:e}'.format
@@ -64,10 +52,11 @@ def read_data_txt(data_file):
             df = df[1:]
 
         df.columns = [i.lower() for i in df.columns]
+        
         # ------> Change all the data into lower case <-----
         df = df.applymap(lambda s: s.lower() if type(s) == str else s)    
         
-        # Remove comments rows (if there are). If there is any column missing raises an error
+        # Remove comments rows (if there are). If there is any column missing, raises an error
         df = remove_comments(df)
         
         # Check if keywords used in the input file are valid
@@ -133,5 +122,5 @@ def read_data_txt(data_file):
         print('Wrong file name/path, using default values')
         df = pd.DataFrame(default_data, index=keywords)
         df = df.T
-        
+                
         return df

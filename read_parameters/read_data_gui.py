@@ -20,6 +20,15 @@ density_units = list(density_units_upp.keys())
 cell_types = list(number_atoms_cell_upp.keys())
 
 def create_gui():
+    """
+    Function to create the GUI and transform the input parameters into a DataFrame object
+
+    Returns
+    -------
+    df : pandas.DataFrame
+        dataframe with the parameters. The columns are named with the same keywords used in the input file.
+
+    """
     
     
     # Step 1: create an object of the "Lectura" class
@@ -27,12 +36,12 @@ def create_gui():
 
     # Step 2: create the conditions for the initial entries
 
-    lec.crea_entrada('Density of the material', "Density", 0.09e-3)
+    lec.crea_entrada('Number density of the material (in particles/volume)', "Density", 2.1290321e28)
     lec.crea_entrada('Number of cells inside the supercell in one direction', "Number of cells", 3)
-    lec.crea_entrada('Temperature of the system', "Temperature", 20)
-    lec.crea_entrada('Total simulation steps', "Max steps", 1000)
-    lec.crea_entrada('Step for each simulation', "Step", 0.001)
-    lec.crea_entrada('Directory for the output files. Last bar is included', "Directory", 'output')
+    lec.crea_entrada('Temperature of the system', "Temperature", 86.4956)
+    lec.crea_entrada('Total number of iterations', "Max steps", 100)
+    lec.crea_entrada('Time step for each iteration (in reduced units)', "Step", 0.005)
+    lec.crea_entrada('Directory for the output files. Last bar SHOULD NOT be included here', "Directory", 'output')
     
     lec.crea_combo('Type of cubic cell', 'Cell type', cell_types)
     lec.crea_combo('Two body potential to be used', 'Potential type', potential_types_upp)
@@ -40,7 +49,7 @@ def create_gui():
     lec.crea_combo('Velocities distribution model', 'Velocities distribution', vels_dist_upp)
 
     lec.crea_combo('Units of density' , 'Density units', density_units, default=False, clmn=2, rw=0, wdth=10)
-    lec.crea_combo('Units of temperature', 'Temp units', temperature_units_upp, default=False, clmn=2, rw=2, wdth=10)
+    lec.crea_combo('Units of temperature', 'Temp units', temperature_units_special_upp, default=False, clmn=2, rw=2, wdth=10)
     # Wait until user fills the entries
     lec.espera()
     
@@ -67,7 +76,7 @@ def create_gui():
     
     # Check if output path exists
     if not os.path.exists(directory):
-        print('Output path provided does not exists. Using default fordel for output file')
+        print('Output path provided does not exist. Using default folder for output file')
         directory = 'output'
     
     

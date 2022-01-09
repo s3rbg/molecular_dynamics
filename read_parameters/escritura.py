@@ -26,13 +26,8 @@ escritura.py: Módulo con una clase que permite escribir datos
               en una ventana
 -----------------------------------------------------------------------
 
---------------------
--- Ejemplo de uso --
---------------------
 """
 from escritura import Escritura
-
-
 
 from tkinter import Tk
 from tkinter import Frame
@@ -173,19 +168,3 @@ class Escritura():
             self.__raiz.quit()
             self.__raiz.destroy()
             
-def main():
-
-    # Paso 1: crear el objeto de la clase Escritura
-    escr = Escritura("Datos del experimento")
-
-    # Paso 2: crear las entradas para mostrar datos
-    escr.inserta_valor("Número de secuencia", 1)
-    escr.inserta_valor("Voltaje (V)", 0.0)
-    escr.inserta_valor("Nombre del técnico", "Pedro")
-
-    # Paso 3: esperar a que el usuario se dé por enterado
-    escr.espera()
-
-    # Paso 4: destruir la ventana
-    escr.destruye()
-main()
