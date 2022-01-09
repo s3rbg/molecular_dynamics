@@ -2,7 +2,7 @@ import numpy as np
 
 def kinetic(velocities):
     """
-    
+    Kinetic energy of a given atom.
 
     Parameters
     ----------

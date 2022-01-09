@@ -2,7 +2,8 @@ import numpy as np
 
 def force_lj_shifted(sigma, distance, rc):
     """
-
+    Accelerations (and forces, as m = 1) considering a double shifted Lennard-Jones potential 
+    (continous until the force's first derivative).
     Parameters
     ----------
     sigma : float
@@ -24,12 +25,12 @@ def force_lj_shifted(sigma, distance, rc):
     """
     r_twelve = rc ** 12 
     r_six = rc ** 6
-
+    distance = distance * sigma
     if distance == 0:
         return 0 
-    if distance <= rc/sigma:
-        f = (24/distance)*(2*(1/distance)**12 - (1/distance)**6)
-        dfc = (48/rc *((1/r_twelve)-0.5*(1/r_six)))
+    if distance <= rc:
+        f = (24 / distance) * (2 * (1/distance) ** 12 - (1/distance) ** 6)
+        dfc = (48 / rc) *( (1/r_twelve) - 0.5 * (1/r_six) )
         force = f - dfc
     else:
         force=0

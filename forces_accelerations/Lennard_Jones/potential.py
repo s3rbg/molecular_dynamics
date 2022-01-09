@@ -1,7 +1,8 @@
 import numpy as np
 
-def potential_lj (sigma, epsilon, distance, rc):
+def potential_lj (sigma, distance, rc):
     """
+    Potential energy for a given distance between atoms, for a vanilla Lennnard-Jones potential.
     
     Parameters
     ----------

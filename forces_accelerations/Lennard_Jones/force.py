@@ -1,7 +1,9 @@
 import numpy as np
 
-def force_lj(sigma, epsilon, distance, rc):
+def force_lj(sigma, distance, rc):
     """
+    Accelerations (and forces, as m = 1) considering a vanilla Lennard-Jones potential
+    for a distance less than a given cutoff
     Parameters
     ----------
     sigma : float
@@ -22,9 +24,10 @@ def force_lj(sigma, epsilon, distance, rc):
     """
     if distance == 0:
         return 0 
-    if distance<=rc/sigma:
+    if distance <= rc/sigma:
         force = (48 * (1/distance) * ((1 / distance) ** (12) - 0.5 * (1 / distance) ** 6))       
     else:
         force = 0
     return force
+
 

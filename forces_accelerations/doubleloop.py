@@ -13,6 +13,7 @@ from write_to_file.to_txt import energy_to_txt
 
 def doubleloop(sigma, type_potential, point, lista, Nat, atoms, vel, nf, LATCON, epsilon, rc, direc):
     """
+    Accelerations and total potential energy for the given positions of the atoms.
     
     Parameters
     ----------
@@ -39,92 +40,50 @@ def doubleloop(sigma, type_potential, point, lista, Nat, atoms, vel, nf, LATCON,
     Returns  (fuerza, potencial, cinetica, total)
     -------
     TYPE
-        the function resturns for arrays one with the forces, another one with the
-        potential energy, another one with the kinetic energy and lastly the total energy
-        of each atom
+        the function returns an arrays  with the forces and the
+        potential energy of the system
     """
     BOXL=(nf*LATCON)/sigma 
-    fuerza=0*np.copy(atoms)
-    potencial = np.zeros(Nat)
-    cinetica= np.zeros(Nat)
-    total= np.zeros(Nat)
-    
-    if type_potential == 'lennard-jones double shifted':
-        for iat in range(Nat-1):
-            position = atoms[iat]
-            JBEG=point[iat]
-            if iat != Nat-2:           
-                JEND=point[iat+1]
-            else:
-                JEND = len(lista)
-            if JEND<JBEG:
-                return print('last neighbour atom lower than first')
-            for jneig in range(JBEG,JEND):
-                J=lista[jneig]
-                position_neig=atoms[J]
-                rel_pos = position-position_neig
-                rel_pos = rel_pos - np.round(rel_pos/BOXL, 0)*BOXL #rel_pos=relative position with the iat atom: R(j)=r(j)-position
-                rel_dis = np.sqrt( rel_pos[0]**2 + rel_pos[1]**2 + rel_pos[2]**2 )
-                
-                theta = np.arccos(rel_pos[2]/rel_dis)
-                phi = np.arctan2(rel_pos[1], rel_pos[0])
-                
-                mod_fuerza = force_lj_shifted(sigma, rel_dis, rc)
-
-                fuerza_x = mod_fuerza * np.cos(phi) * np.sin(theta)
-                fuerza_y = mod_fuerza * np.sin(phi) * np.sin(theta)
-                fuerza_z = mod_fuerza * np.cos(theta)
-                
-                array_fuerza = np.array([fuerza_x, fuerza_y, fuerza_z])
-                for x in range(3):
-                    fuerza[iat][x]=fuerza[iat][x] + array_fuerza[x]
-                    fuerza[J][x]= fuerza[J][x] - array_fuerza[x]
-
-                aux = potential_lj_shifted(sigma, rel_dis, rc)
-                potencial[iat]= potencial[iat] + aux
-                potencial[J]= potencial[J] + aux
-            cinetica[iat]= cinetica[iat] + kinetic(vel[iat])
-        cinetica = np.sum(cinetica)
-        potencial = np.sum(potencial)
-    elif type_potential == 'lennard-jones':
-
-        for iat in range(Nat):
-            position = atoms[iat]
-            JBEG=point[iat]
-            JEND=point[iat+1]-1
-            if JEND<JBEG:
-                return print('last neighbour atom lower than first')
-            for jneig in range(JBEG,JEND):
-                J=lista[jneig]
-                position_neig=atoms[J]
-                rel_pos = position-position_neig
-                rel_pos = rel_pos - np.round(rel_pos/BOXL,1)*BOXL #rel_pos=relative position with the iat atom: R(j)=r(j)-position
-                rel_dis = np.sqrt( rel_pos[0]**2 + rel_pos[1]**2 + rel_pos[2]**2 )
-                
-                mod_fuerza = force_lj(sigma, rel_dis, rc)
-
-                fuerza_x = mod_fuerza * np.cos(phi) * np.sin(theta)
-                fuerza_y = mod_fuerza * np.sin(phi) * np.sin(theta)
-                fuerza_z = mod_fuerza * np.cos(theta)
-                
-                array_fuerza = np.array([fuerza_x, fuerza_y, fuerza_z])
-                for x in range(3):
-                    fuerza[iat][x]=fuerza[iat][x] + array_fuerza[x]
-                    fuerza[J][x]= fuerza[J][x] - array_fuerza[x]
+    force=0*np.copy(atoms)
+    potential = np.zeros(Nat)    
             
-                potencial[iat]= potencial[iat] + potential_lj(sigma, epsilon, rel_dis, rc)
-                potencial[J]= potencial[J] + potential_lj(sigma, epsilon, rel_dis, rc)
-                
-                aux = potential_lj(sigma, rel_dis, rc)
-                potencial[iat]= potencial[iat] + aux
-                potencial[J]= potencial[J] + aux
-                
-            cinetica[iat]= cinetica[iat] + kinetic(vel[iat]) 
-        total = cinetica + potencial
+    for iat in range(Nat-1):
+        position = atoms[iat]
+        JBEG=point[iat]
+        if iat != Nat-2:           
+            JEND=point[iat+1]
+        else:
+            JEND = len(lista)
+        if JEND<JBEG:
+            return print('last neighbour atom lower than first')
+        for jneig in range(JBEG,JEND):
+            J=lista[jneig]
+            position_neig=atoms[J]
+            rel_pos = position-position_neig
+            rel_pos = rel_pos - np.round(rel_pos/BOXL, 0)*BOXL #rel_pos=relative position with the iat atom: R(j)=r(j)-position
+            
+            # Transform distances in cartesian to spherical
+            rel_dis = np.sqrt( rel_pos[0]**2 + rel_pos[1]**2 + rel_pos[2]**2 )
+            theta = np.arccos(rel_pos[2]/rel_dis)
+            phi = np.arctan2(rel_pos[1], rel_pos[0]) # Special arctan, that takes into account the cuadrant.
+            
+            if type_potential == 'lennard-jones double shifted':
+                mod_force = force_lj_shifted(sigma, rel_dis, rc)
+            
+            elif type_potential == 'lennard-jones':
+                mod_force = force_lj(sigma, rel_dis, rc)
+            
+            # Once the force is calculated, it is transformed back to cartesian
+            force_x = mod_force * np.cos(phi) * np.sin(theta)
+            force_y = mod_force * np.sin(phi) * np.sin(theta)
+            force_z = mod_force * np.cos(theta)
+            
+            array_force = np.array([force_x, force_y, force_z])
+            for x in range(3):
+                force[iat][x]=force[iat][x] + array_force[x]
+                force[J][x]= force[J][x] - array_force[x]
+
+            potential[iat]= potential[iat] + potential_lj_shifted(sigma, rel_dis, rc)
+    potential = np.sum(potential)
         
-        
-    else:
-        print('wrong tipe of potential') 
-    print(cinetica+potencial)
-    energy_to_txt(cinetica, potencial, direc)
-    return fuerza, potencial, cinetica
+    return force, potential
