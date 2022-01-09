@@ -9,7 +9,24 @@ Created on Tue Jan  4 16:43:44 2022
 from common_modules.imports import *
 
 def energy_to_txt(kinetic, potential, direc):
-    append_new_line(direc + '/energy_each_step.txt', '{:.2f}, {:.2f}, {:.2f}'.format(kinetic, potential, kinetic+potential))
+    """
+    Append kinetic, potential and total energy at the end of the output file
+
+    Parameters
+    ----------
+    kinetic : float
+        kinetic energy.
+    potential : float
+        potential energy.
+    direc : str
+        directory to save the file.
+
+    Returns
+    -------
+    None.
+
+    """
+    append_new_line(direc + '/energy_each_step.txt', '{:.4f}, {:.5f}, {:.4f}'.format(kinetic, potential, kinetic+potential))
     
 
 def positions_to_txt(time, itime, pos, directory='.'):
