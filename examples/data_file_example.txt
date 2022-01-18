@@ -1,0 +1,15 @@
+variable,             value,         units(if_needed),  Comments(as many columns as needed)
+density,              2.1290321e28,          m**-3
+number_of_units,      3
+temperature,          86.4956,           Kelvin
+epsilon,              1.654438e-21,         J
+sigma,                0.341,         nm
+cutoff_distance,      2.5
+cutoff_list,          2.7
+CELL_type,            FCC
+potential_type,       lennard-jones double shifted
+algo_ode,             Velocity-Verlet
+tot_t,                100
+delta_t,              0.005
+velocities_dist,      M-B
+directory,            output
