@@ -1,6 +1,6 @@
 VERY IMPORTANT NOTE: the package "tqdm" must be installed for the program to execute correctly. For installation type: "conda install -c conda-forge tqdm" in the Anaconda prompt. The program is prepared to show a warning if it is not installed. In the case of having problems with the installation, the files of the folder examples can  be checked. This are the files obtained by the execution of the code in my computer with the default data. 
 
-NOTE2: There are also videos of the simulation in XCrySDen (for some reason, the recording tool wasn't working as expected, so the videos are simply screen recordings, with worse quality unfortunately).
+NOTE2: There are also videos of the simulation in XCrySDen in the "xcrysden_movies" folder (for some reason, the recording tool wasn't working as expected, so the videos are simply screen recordings, with worse quality unfortunately).
 
 Instructions to execute the program in Linux:
 - Download and unzip the file in a folder of your desire

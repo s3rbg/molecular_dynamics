@@ -1,0 +1,10 @@
+{
+  version: 1,
+  mediaFileName: 'front_def.mkv',
+  cutSegments: [
+    {
+      end: 59.03333333333333,
+      name: '',
+    },
+  ],
+}
