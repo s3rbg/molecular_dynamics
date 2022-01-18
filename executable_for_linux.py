@@ -22,7 +22,7 @@ from common_modules.errors import InputError
 def main(): 
     
     lec = Lectura('input')
-    lec.crea_label('Welcome to molecular dynamics simulation!', 1, 0)
+    lec.crea_label('Welcome to the molecular dynamics simulator!', 1, 0)
     lec.crea_combo('Select a way to introduce the data', 'Select the input', ['GUI', 'Data file'],
                    clmn=1, rw=1, last=True)
     lec.espera()

@@ -13,15 +13,15 @@ density_units_upp = {"m**-3": 10**-6, "cm**-3": 1}
 
 energy_units_upp = {'J':1/1.6e-19, 'erg': 6.242e+11, 'eV':1, 'cal': 26131936951817052000}
 
-number_atoms_cell_upp = {'FCC': 4, 'BCC': 2, 'SC': 1}
+number_atoms_cell_upp = {'FCC': 4}
 
 temperature_units_upp = ('Kelvin', 'Celsius', 'C', 'K', 'F', 'Fahrenheit')
 
 temperature_units_special_upp = ('Kelvin', 'Celsius', 'Fahrenheit')
 
 ode_algos_upp = ('Velocity-Verlet', 'Verlet', 'Leap-Frog')
-potential_types_upp = ('Lennard-Jones double shifted', 'Lennard-Jones') # (...)
-vels_dist_upp = ('M-B', 'otro')
+potential_types_upp = ('Lennard-Jones double shifted', 'Lennard-Jones')
+vels_dist_upp = ('M-B', 'Coming soon...')
 
 keywords = ('density', 'number_of_units', 'epsilon', 'temperature',
             'cell_type', 'potential_type', 'algo_ode', 'tot_t', 'delta_t', 'sigma',

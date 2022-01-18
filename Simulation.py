@@ -23,7 +23,7 @@ from forces_accelerations.Lennard_Jones_shifted.potential_s import potential_lj_
 from solve_ode.ode_algorithms import verlet, velocity_verlet, leap_frog
 
 # Output writing functions
-from write_to_file.to_txt import positions_to_txt, energy_to_txt
+from write_to_file.to_txt import positions_to_txt, energy_to_txt, append_new_line
 
 # Other imports
 from common_modules.imports import *
@@ -82,7 +82,7 @@ class simulation():
         self.reduced_density = self.density * (self.sigma * 10**-7) ** 3
         self.reduced_temperature = k * self.temperature/self.epsilon
                 
-        self.lattice_constant = self.get_constant()
+        self.lattice_constant = self.get_constant() * self.sigma
         
         # Create the output folder if it is deleted
         if not os.path.exists(self.directory):
@@ -100,34 +100,42 @@ class simulation():
         None.
 
         """
+        
+        # Initialize positions/velocities
+        positions, velocities = initialize(self.reduced_temperature, self.n_cells, self.sigma, self.lattice_constant, self.directory)
 
         # Create data files to store the data. If the files exist, they are removed.
         energy_file_name = self.directory + '/energy_each_step.txt'
+        positions_file_name = self.directory + '/positions.axsf'
 
         if os.path.exists(energy_file_name):
             os.remove(energy_file_name)
             
-
-        # Create the headers for the files 
+        if os.path.exists(positions_file_name):
+            os.remove(positions_file_name)
             
-        with open(energy_file_name, "a+") as file_object:
-            file_object.write('Energy, in reduced units, for every time step')
-            file_object.seek(0)
-            # If file is not empty then append '\n'
-            data = file_object.read(100)
-            if len(data) > 0:
-                file_object.write("\n")
-            file_object.write('Kinetic, Potential, Total')
+
+        # Create the headers for the files
+        append_new_line(energy_file_name, 'Kinetic, Potential, Total')
         
-    
-        # Initialize positions/velocities
-        positions, velocities = initialize(self.reduced_temperature, self.n_cells, self.sigma, self.lattice_constant, self.directory)
+        # Length of the supercell in Angstrom
+        len_supercell = self.lattice_constant * 10 * self.n_cells
         
-        # Save initial positions
-        positions_to_txt(0, 1, positions, self.directory)
-       
+        append_new_line(positions_file_name, 'ANIMSTEPS       {}'.format(int(self.tot_t + 1)))
+        append_new_line(positions_file_name, 'CRYSTAL')
+        append_new_line(positions_file_name, 'PRIMVEC')
+        append_new_line(positions_file_name, '    {:.5f}     {:.5f}     {:.5f}'.format(len_supercell, 0.0, 0.0))
+        append_new_line(positions_file_name, '     {:.5f}    {:.5f}     {:.5f}'.format(0.0, len_supercell, 0.0))
+        append_new_line(positions_file_name, '     {:.5f}     {:.5f}    {:.5f}'.format(0.0, 0.0, len_supercell))
+
+            
         # Total number of atoms
         self.n_tot_at = len(positions)
+        
+        # Save initial positions
+        positions_to_txt(positions*self.sigma*10, 1, self.directory, self.n_tot_at)
+       
+        # Total number of atoms
         
         # Parameters that remain constant in each iteration of the ODE solving algorithm
         common_parameters = (self.n_tot_at, self.delta_t, self.cutoff_list, self.cutoff_distance, 
@@ -151,7 +159,7 @@ class simulation():
                 j = j+1 
                 old_parameters = velocity_verlet(*old_parameters, *common_parameters)
                 step = step + self.delta_t
-                positions_to_txt(step, j, old_parameters[0], self.directory) # Save in a text file the new coordinates
+                positions_to_txt(old_parameters[0] * self.sigma * 10, j, self.directory, self.n_tot_at)
 
         elif self.algo_ode == 'leap-frog':
             # Calculate v(t + delta_t/2)
@@ -174,7 +182,7 @@ class simulation():
                 j = j+1
                 old_parameters = leap_frog(*old_parameters, *common_parameters)
                 step = step + self.delta_t
-                positions_to_txt(step, j, old_parameters[0], self.directory) # Save in a text file the new coordinates
+                positions_to_txt(old_parameters[0] * self.sigma * 10, j, self.directory, self.n_tot_at) # Save in a text file the new coordinates
 
         elif self.algo_ode == 'verlet':
             initial_parameters = [positions, velocities, accelerations, neigh_point, neigh_list, displacements,
@@ -189,7 +197,7 @@ class simulation():
                 old_parameters = verlet(*old_parameters, *common_parameters)
                 step = step + self.delta_t
 
-                positions_to_txt(step, j, old_parameters[1], self.directory) # Save in a text file the new coordinates
+                positions_to_txt(old_parameters[0] * self.sigma * 10, j, self.directory, self.n_tot_at) # Save in a text file the new coordinates
         self.plot_energy_cons()
         
         
