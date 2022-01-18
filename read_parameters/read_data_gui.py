@@ -18,6 +18,7 @@ from common_modules.errors import InputError
 
 density_units = list(density_units_upp.keys())
 cell_types = list(number_atoms_cell_upp.keys())
+cell_types.append('Coming soon...')
 
 def create_gui():
     """

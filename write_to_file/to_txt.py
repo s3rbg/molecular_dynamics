@@ -29,33 +29,27 @@ def energy_to_txt(kinetic, potential, direc):
     append_new_line(direc + '/energy_each_step.txt', '{:.4f}, {:.5f}, {:.4f}'.format(kinetic, potential, kinetic+potential))
     
 
-def positions_to_txt(time, itime, pos, directory='.'):
+def positions_to_txt(positions, step, direc, n_at):
     """
-    Creates a .dat file with the positions for a given time step
+    Creates a .axfs file with the positions for every time step
     
     Parameters:
-        time: float
-            time of the simulated positions
-        itime: int
-            index of the time step to create the file
-        pos: array
-            positions of the atoms for the given time step
+        positions: array(array)
+            positions of every atom, in angstrom
+        step: int
+            step of the simulation
         directory: string
             Directory where the file is going to be saved without the last bar.
-            The default is where this .py file is.
+            The default is where the output folder file is.
+        n_at: int
+            Total number of atoms
             
     """
-    file = directory + '/positions'+str(itime)+'.dat'
-    columns  = ['x', 'y', 'z']
-    index = np.arange(len(pos))+1
-    df = pd.DataFrame(data=pos, index=index, columns=columns)
-    
-    if os.path.exists(file):
-        os.remove(file)
-    with open(file, 'a+') as f:
-        f.write('Positions of the atoms at time '+str(time)+'\n\n')
-        f.close()
-    df.to_csv(file, sep='\t', mode='a+')
+    append_new_line(direc + '/positions.axsf', 'PRIMCOORD         {}'.format(step))
+    append_new_line(direc + '/positions.axsf', '       {}         1'.format(n_at))
+
+    for i in positions:
+        append_new_line(direc + '/positions.axsf', '        {}    {:.5f}    {:.5f}    {:.5f}'.format(18, i[0], i[1], i[2]))
     
     
 

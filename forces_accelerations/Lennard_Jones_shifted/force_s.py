@@ -25,7 +25,7 @@ def force_lj_shifted(sigma, distance, rc):
     """
     r_twelve = rc ** 12 
     r_six = rc ** 6
-    distance = distance * sigma
+
     if distance == 0:
         return 0 
     if distance <= rc:

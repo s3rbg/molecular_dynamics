@@ -79,11 +79,11 @@ def doubleloop(sigma, type_potential, point, lista, Nat, atoms, vel, nf, LATCON,
             force_z = mod_force * np.cos(theta)
             
             array_force = np.array([force_x, force_y, force_z])
+
             for x in range(3):
                 force[iat][x]=force[iat][x] + array_force[x]
                 force[J][x]= force[J][x] - array_force[x]
 
             potential[iat]= potential[iat] + potential_lj_shifted(sigma, rel_dis, rc)
     potential = np.sum(potential)
-        
     return force, potential

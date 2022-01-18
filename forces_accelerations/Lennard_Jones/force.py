@@ -24,7 +24,7 @@ def force_lj(sigma, distance, rc):
     """
     if distance == 0:
         return 0 
-    if distance <= rc/sigma:
+    if distance <= rc:
         force = (48 * (1/distance) * ((1 / distance) ** (12) - 0.5 * (1 / distance) ** 6))       
     else:
         force = 0

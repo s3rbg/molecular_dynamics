@@ -47,7 +47,7 @@ def list_neighbour(sigma, LATCON, nat, nf, rc, atoms, direc=None):
         # If a path is given, it saves the position of the atom and the position of its neighbours
         if direc != None:
             append_new_line(direc + '/ini_neigh.txt', 'Next atom:')
-            append_new_line(direc + '/ini_neigh.txt', '{:.3f}, {:.3f}, {:.3f}'.format(position[0]*sigma, position[1]*sigma, position[2]*sigma))
+            append_new_line(direc + '/ini_neigh.txt', '{:.3f}, {:.3f}, {:.3f}'.format(position[0], position[1], position[2]))
             append_new_line(direc + '/ini_neigh.txt', 'Neighbours:')
 
         for j in range(iat+1, nat):
@@ -55,9 +55,9 @@ def list_neighbour(sigma, LATCON, nat, nf, rc, atoms, direc=None):
             rel_pos = position-atoms[j]
             rel_pos = rel_pos - np.round(rel_pos/BOXL, 0)* BOXL #rel_pos=relative position with the iat atom: R(j)=r(j)-position
             rel_dis = np.sqrt( rel_pos[0]**2 + rel_pos[1]**2 + rel_pos[2]**2 )
-            if rel_dis <= rc/sigma:
+            if rel_dis <= rc:
                 if direc != None:
-                    append_new_line(direc + '/ini_neigh.txt', '{:.3f}, {:.3f}, {:.3f}, {:.3f}'.format(x[0]*sigma, x[1]*sigma, x[2]*sigma, sigma*rel_dis))
+                    append_new_line(direc + '/ini_neigh.txt', '{:.3f}, {:.3f}, {:.3f}, {:.3f}'.format(x[0], x[1], x[2], rel_dis))
                 LIST.append(j)
                 NLIST = NLIST + 1   
     return np.array(POINT), np.array(LIST)

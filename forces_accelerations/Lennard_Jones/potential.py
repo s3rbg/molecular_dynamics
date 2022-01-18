@@ -24,7 +24,7 @@ def potential_lj (sigma, distance, rc):
         the potencial energy (original leonard jones potential)
         of particle 1 due to particle 2 (the same of 2 due to 1)
     """
-    if distance<=rc/sigma:
+    if distance<=rc:
         energy= 4 * ( (1/distance) ** (12) - (1/distance) ** 6)   
     else:
         energy = 0

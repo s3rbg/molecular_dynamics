@@ -77,16 +77,16 @@ def velocity_verlet(positions, velocities, accelerations, old_neigh_point, old_n
     """
     initial_positions = positions  # Save initial positions to compute the displacements
     
-    positions = positions*sigma + velocities * delta_t + 0.5 * accelerations * delta_t ** 2
+    positions = positions + velocities * delta_t + 0.5 * accelerations * delta_t ** 2
     inter_velocities = velocities + 0.5 * accelerations * delta_t
     
     # Compute displacements
-    displacements = displacements + np.abs([aux((i*sigma-j)) for i, j in zip(initial_positions, positions)])
+    displacements = displacements + np.abs([aux((i-j)) for i, j in zip(initial_positions, positions)])
     disp_sorted = np.sort(displacements)
     
     # Choose to compute a new neighbour list (or not)
     if disp_sorted[-1] + disp_sorted[-2] >= (cutoff_for_disp-cutoff_for_neigh):
-        neigh_point, neigh_list = list_neighbour(sigma, lat_con, n_at, number_of_cells, cutoff_for_disp, positions/sigma)
+        neigh_point, neigh_list = list_neighbour(sigma, lat_con, n_at, number_of_cells, cutoff_for_disp, positions)
         displacements = 0
     else:
         neigh_point = old_neigh_point
@@ -94,7 +94,7 @@ def velocity_verlet(positions, velocities, accelerations, old_neigh_point, old_n
 
     # Compute accelerations and potential energy
     accelerations, potential = doubleloop(sigma, potential_type, neigh_point, neigh_list, 
-                                           n_at, positions/sigma, velocities, number_of_cells, 
+                                           n_at, positions, velocities, number_of_cells, 
                                            lat_con, epsilon, cutoff_for_neigh, direc)
     # Final velocities
     velocities = inter_velocities + 0.5 * accelerations * delta_t
@@ -104,7 +104,7 @@ def velocity_verlet(positions, velocities, accelerations, old_neigh_point, old_n
         kin = np.sum([kinetic(i) for i in velocities])
         energy_to_txt(kin, potential, direc)
 
-    return positions/sigma, velocities, accelerations, neigh_point, neigh_list, displacements
+    return positions, velocities, accelerations, neigh_point, neigh_list, displacements
 
 def leap_frog(positions, velocities, accelerations, old_neigh_point, old_neigh_list, displacements, n_at, delta_t, cutoff_for_disp, cutoff_for_neigh, 
               potential_type, number_of_cells, lat_con, sigma, epsilon, direc):
@@ -112,17 +112,17 @@ def leap_frog(positions, velocities, accelerations, old_neigh_point, old_neigh_l
     initial_positions = positions # Save initial positions to compute the displacements
     
     inter_velocities = velocities + accelerations * delta_t
-    positions = positions*sigma + inter_velocities * delta_t
+    positions = positions + inter_velocities * delta_t
     
     velocities_current = (inter_velocities + velocities) / 2
     
     # Compute new accelerations
-    displacements = displacements + np.abs([aux((i*sigma-j)) for i, j in zip(initial_positions, positions)])
+    displacements = displacements + np.abs([aux((i-j)) for i, j in zip(initial_positions, positions)])
     disp_sorted = np.sort(displacements)
     
     # Compute new accelerations
     if disp_sorted[-1] + disp_sorted[-2] >= (cutoff_for_disp-cutoff_for_neigh):
-        neigh_point, neigh_list = list_neighbour(sigma, lat_con, n_at, number_of_cells, cutoff_for_disp, positions/sigma)
+        neigh_point, neigh_list = list_neighbour(sigma, lat_con, n_at, number_of_cells, cutoff_for_disp, positions)
         displacements = 0
     else:
         neigh_point = old_neigh_point
@@ -130,13 +130,13 @@ def leap_frog(positions, velocities, accelerations, old_neigh_point, old_neigh_l
 
 
     accelerations, potential = doubleloop(sigma, potential_type, neigh_point, neigh_list, 
-                                           n_at, positions/sigma, inter_velocities, number_of_cells, 
+                                           n_at, positions, inter_velocities, number_of_cells, 
                                            lat_con, epsilon, cutoff_for_neigh, direc)
 
     kin = np.sum([kinetic(i) for i in velocities_current])
     energy_to_txt(kin, potential, direc)
     
-    return positions/sigma, inter_velocities, accelerations, neigh_point, neigh_list, displacements
+    return positions, inter_velocities, accelerations, neigh_point, neigh_list, displacements
 
 
 def verlet(positions, old_positions, velocities, accelerations, old_neigh_point, old_neigh_list, displacements,
@@ -145,29 +145,29 @@ def verlet(positions, old_positions, velocities, accelerations, old_neigh_point,
     initial_positions = positions # Save initial positions to compute the displacements
     
     
-    positions = 2 * positions*sigma - old_positions*sigma + accelerations * delta_t ** 2 # Next step
+    positions = 2 * positions - old_positions + accelerations * delta_t ** 2 # Next step
     
-    velocities = (positions - old_positions*sigma) / (2 * delta_t) # Next step
+    velocities = (positions - old_positions) / (2 * delta_t) # Next step
     
      # Compute new accelerations
-    displacements = displacements + np.abs([aux((i*sigma-j)) for i, j in zip(initial_positions, positions)])
+    displacements = displacements + np.abs([aux((i-j)) for i, j in zip(initial_positions, positions)])
     disp_sorted = np.sort(displacements)
     
     if disp_sorted[-1] + disp_sorted[-2] >= (cutoff_for_disp-cutoff_for_neigh):
-        neigh_point, neigh_list = list_neighbour(sigma, lat_con, n_at, number_of_cells, cutoff_for_disp, positions/sigma)
+        neigh_point, neigh_list = list_neighbour(sigma, lat_con, n_at, number_of_cells, cutoff_for_disp, positions)
         displacements = 0
     else:
         neigh_point = old_neigh_point
         neigh_list = old_neigh_list
         
     accelerations, potential = doubleloop(sigma, potential_type, neigh_point, neigh_list, 
-                                               n_at, positions/sigma, velocities, number_of_cells, 
+                                               n_at, positions, velocities, number_of_cells, 
                                                lat_con, epsilon, cutoff_for_neigh, direc)
 
     kin = np.sum([kinetic(i) for i in velocities])
     energy_to_txt(kin, potential, direc)
     
-    return positions/sigma, initial_positions, velocities, accelerations, neigh_point, neigh_list, displacements
+    return positions, initial_positions, velocities, accelerations, neigh_point, neigh_list, displacements
     
     
 def aux(x):
