@@ -6,8 +6,8 @@ Created on Sun Oct 24 16:01:22 2021
 @author: dgiron
 """
 # Input imports
-from read_parameters.read_data_file import read_data_txt
 from read_parameters.read_data_gui import create_gui
+from read_parameters.read_data_file import read_data_txt
 from read_parameters.check_input_errors import check_type
 
 # Initialization imports

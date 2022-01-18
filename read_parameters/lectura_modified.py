@@ -100,6 +100,14 @@ class Lectura():
         self.__raiz.destroy()
 
     def _colocar_widgets(self):
+        """
+        Places the widgets
+
+        Returns
+        -------
+        None.
+
+        """
         fila: int = 0
         for i in range(len(self.__textos)):
             self.__etiquetas[i].grid(column=0, row=fila, sticky=E,
@@ -113,9 +121,46 @@ class Lectura():
                              columnspan=2, padx=5, pady=5)
 
     def coloca_widget_donde_quiera(self, entrada, clmn, rw):
+        """
+        Places the widgets in a given position
+
+        Parameters
+        ----------
+        entrada : str
+            name of the entry.
+        clmn : int
+            column.
+        rw : int
+            row.
+
+        Returns
+        -------
+        None.
+
+        """
         entrada.grid(column=clmn, row=rw, padx=5, pady=5)
         
     def coloca_widget_donde_quiera_special_last_item(self, entrada, clmn, rw, etiqueta):
+        """
+        Special function to place a widget if it is the last item. The other function does not work fine
+        for some reason.
+
+        Parameters
+        ----------
+        entrada : str
+            text to be displayed.
+        clmn : int
+            column.
+        rw : int
+            row.
+        etiqueta : str
+            name of the entry.
+
+        Returns
+        -------
+        None.
+
+        """
         self.__etiquetas[0].grid(column=clmn-1, row=rw, sticky=E,
                                      padx=5, pady=5)
         entrada.grid(column=clmn, row=rw, padx=5, pady=5)
@@ -139,12 +184,31 @@ class Lectura():
 
     def crea_entrada(self, msg, etiqueta: str, valor_inicial: str = "", default=True, clmn=0, rw=0, wdth=20):
         """
-        Crea una entrada en la que se puede teclear texto
+        Creates a box to introduce text
 
-        Args:
-            etiqueta: texto colocado al lado de la entrada para identificarla
-            valor_inicial: el valor inicial escrito en la entrada
+        Parameters
+        ----------
+        msg : str
+            message to show while pointing with the cursor.
+        etiqueta : str
+            name of the entry.
+        valor_inicial : str, optional
+            value to be displayed initially. The default is "".
+        default : bool, optional
+            if True, writes text close to the box. The default is True.
+        clmn : int, optional
+            column to place the box. The default is 0.
+        rw : TYPE, optional
+            row to place the box. The default is 0.
+        wdth : float, optional
+            width of the box. The default is 20.
+
+        Returns
+        -------
+        None.
+
         """
+     
         # Comprobamos etiqueta repetida
         if etiqueta in self.__diccionario:
             self._muestra_error("Etiqueta '"+etiqueta+"' repetida")
@@ -173,11 +237,56 @@ class Lectura():
             self.escribe_mensaje(msg, lbl)
             
     def crea_label(self, etiqueta, columna, fila):
+        """
+        Writes text in a given place
+
+        Parameters
+        ----------
+        etiqueta : str
+            name of the entry.
+        columna : int
+            column to place it.
+        fila : int
+            row to place it.
+
+        Returns
+        -------
+        None.
+
+        """
         Label(self.__marco, text=etiqueta).grid(column=columna, row=fila, padx=5, pady=5)
             
                 
             
     def crea_combo(self, msg, etiqueta, values, default=True, clmn=0, rw=0, wdth=20, last=False):
+        """
+        Creates a combobox
+
+        Parameters
+        ----------
+        msg : str
+            message.
+        etiqueta : str
+            label to name the entry.
+        values : any
+            default value to be displayed.
+        default : bool, optional
+            if True creates the combobox with text. The default is True.
+        clmn : int, optional
+            column of the canvas. The default is 0.
+        rw : int, optional
+            row of the canvas. The default is 0.
+        wdth : float, optional
+            width of the combobox. The default is 20.
+        last : bool, optional
+            if True, it locates the widget in (clmn, rw) position. The default is False.
+
+        Returns
+        -------
+        entrada : any
+            value.
+
+        """
         if etiqueta in self.__diccionario and default:
             self._muestra_error("Etiqueta '"+etiqueta+"' repetida")
             
@@ -288,8 +397,23 @@ class Lectura():
         return float(num)
         
     def escribe_mensaje(self, mensaje, widget):
+        """
+        Writes a message while pointing with the cursor
 
-         CreateToolTip(widget, text=mensaje)
+        Parameters
+        ----------
+        mensaje : str
+            message.
+        widget : str
+            label of the line where the message is activated.
+
+        Returns
+        -------
+        None.
+
+        """
+
+        CreateToolTip(widget, text=mensaje)
 
 
     def destruye(self):
